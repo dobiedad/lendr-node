@@ -1,7 +1,12 @@
 var firebase = require("firebase");
-var config = require("../firebaseConfig")
 
-var app = firebase.initializeApp(config);
+if (window.__env && window.__env.firebaseConfig) {
+  app = firebase.initializeApp(window.__env.firebaseConfig);
+  console.log('env')
+} else {
+  var config = require("../firebaseConfig")
+  app = firebase.initializeApp(config);
+}
 
 app.getCurrentUserId = function() {
   var user = app.auth().currentUser;
