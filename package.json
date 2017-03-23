@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js && watchify index.js -o public/bundle.js",
+    "start": "node app.js && watchify views/index.js -o public/bundle.js",
     "test": "test",
-    "watch": "watchify index.js -o public/bundle.js"
+    "watch": "watchify views/index.js -o public/bundle.js"
   },
   "author": "dobiedad",
   "license": "MIT",

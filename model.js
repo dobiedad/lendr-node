@@ -10,6 +10,9 @@ function Model(options) {
     pending:{},
     approved:{}
   };
+  this.modal = {
+
+  }
   this.title = 'lendr';
   for (var key in options) {
     if (typeof(this[key]) == 'undefined') {
@@ -32,6 +35,16 @@ Model.prototype.loadDebts = function() {
   var self = this;
   this.debtService.loadDebtors(this)
   this.debtService.loadLenders(this)
+};
+
+Model.prototype.resolveDebt = function(debt) {
+  var self = this;
+  return this.debtService.resolve(debt)
+};
+
+Model.prototype.approveDebt = function(debt) {
+  var self = this;
+  return this.debtService.approve(debt)
 };
 
 Model.prototype.checkAuthenticated = function() {
