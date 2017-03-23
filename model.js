@@ -2,7 +2,7 @@ var shortid = require('shortid');
 
 function Model(options) {
   options = options || {};
-  this.screen = 'launch';
+  this.screen = 'lendr';
   this.authService = null;
   this.debtService = null;
   this.currentUser = null;

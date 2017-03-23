@@ -20,8 +20,22 @@ function render(model) {
   return h('div',
     model.currentUser ?
     h('div.main',
-      h('div.navbar',model.title),
-      renderHome(model)
+      h('div.navbar',
+      model.screen != 'lendr'?
+        h('button.back',{onclick:function () {
+          model.screen = 'lendr'
+        }})
+      : undefined
+      ,model.screen),
+      model.screen == 'lendr' ?
+        renderHome(model)
+      : undefined,
+      model.screen == 'New Debt' ?
+        renderNewDebt(model)
+      : undefined,
+      model.screen == 'Notifications' ?
+      renderNotifications(model)
+      : undefined
     )
    : renderLogin(model)
   );
@@ -40,10 +54,32 @@ function renderLogin(model) {
   )
 }
 
+function renderNewDebt(model) {
+  return h('div.container')
+}
+
+function renderNotifications(model) {
+  return h('div.container')
+}
+
 function renderHome(model) {
   return h('div.container',
-    h('h2',model.currentUser.name),
     h('img.profile-image', {src: model.currentUser.img }),
+    h('h1',model.currentUser.name),
+    h('div.menu-buttons',
+      h('button.main-button', {
+        title: 'New Debt',
+        onclick: function() {
+          model.screen = 'New Debt'
+        }
+      }, 'New Debt'),
+      h('button.main-button', {
+        title: 'Notifications',
+        onclick: function() {
+          model.screen = 'Notifications'
+        }
+      }, 'Notifications')
+  ),
     h('ul.table-section',
       h('div.title',
         h('h3','friends who i owe')
