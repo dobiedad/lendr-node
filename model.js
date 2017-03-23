@@ -6,6 +6,7 @@ function Model(options) {
   this.authService = null;
   this.debtService = null;
   this.currentUser = null;
+  this.debts = {};
   this.title = 'lendr';
   for (var key in options) {
     if (typeof(this[key]) == 'undefined') {
@@ -22,6 +23,12 @@ Model.prototype.login = function() {
       self.currentUser = user
       self.refresh()
     })
+};
+
+Model.prototype.loadDebts = function() {
+  var self = this;
+  this.debtService.loadDebtors(this)
+  this.debtService.loadLenders(this)
 };
 
 Model.prototype.checkAuthenticated = function() {

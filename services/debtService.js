@@ -19,28 +19,26 @@ DebtService.prototype.resolve = function (debt) {
   return this.create(debt)
 };
 
-DebtService.prototype.loadDebtorsFor = function (id) {
-  console.log(id)
+DebtService.prototype.loadDebtors = function (model) {
+  var id = model.currentUser.fbid
   return this.firebaseApp.database().ref('debt')
   .orderByChild("lender")
   .equalTo(id)
-    .once('value')
-      .then(function (snapshot) {
-        return enumerateDebt(snapshot.val())
-      })
-
+    .on('value',function (snapshot) {
+      model.debts.debtors = enumerateDebt(snapshot.val())
+      model.refresh()
+    })
 };
 
-DebtService.prototype.loadLendersFor = function (id) {
-  console.log(id)
+DebtService.prototype.loadLenders = function (model) {
+  var id = model.currentUser.fbid
   return this.firebaseApp.database().ref('debt')
   .orderByChild("debtor")
   .equalTo(id)
-    .once('value')
-      .then(function (snapshot) {
-        return enumerateDebt(snapshot.val())
-      })
-
+    .on('value',function (snapshot) {
+      model.debts.lenders = enumerateDebt(snapshot.val())
+      model.refresh()
+    })
 };
 
 function enumerateDebt(object) {

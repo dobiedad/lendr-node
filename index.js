@@ -11,6 +11,12 @@ function render(model) {
   if(!model.currentUser){
      model.checkAuthenticated()
   }
+  else{
+    if(!model.debts.lenders || !model.debts.debtors){
+       model.loadDebts()
+    }
+  }
+
   return h('div',
     model.currentUser ?
     h('div',
@@ -37,9 +43,22 @@ function renderLogin(model) {
 function renderHome(model) {
   return h('div.container',
     h('h2',model.currentUser.name),
-      h('img', {
-        src: model.currentUser.img })
+    h('img', {src: model.currentUser.img }),
+    h('h3','friends who i owe'),
+    model.debts.lenders ?
+    renderTableFor(model.debts.lenders)
+    :undefined,
+    h('h3','friends who owe me'),
+    model.debts.debtors ?
+    renderTableFor(model.debts.debtors):undefined
   )
+}
+
+function renderTableFor(debts){
+  return('ul',
+      debts.map(function(debt) {
+        return h('li',debt.amount)
+      }))
 }
 
 hyperdom.append(document.body, render, m);
