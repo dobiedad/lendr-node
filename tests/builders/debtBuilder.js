@@ -20,8 +20,8 @@ DebtBuilder.prototype.valid = function() {
   this.debtorName = "debtor_" + shortid.generate();
   this.lenderName = "lender +" + shortid.generate();
   this.createdAt = new Date().getTime();
-  this.lenderImg = gifs.red;
-  this.debtorImg = gifs.blue;
+  this.lenderImg = 'http://portfoliotheme.org/enigmatic/wp-content/uploads/sites/9/2012/07/placeholder1.jpg';
+  this.debtorImg = 'https://placeholdit.imgix.net/~text?txtsize=28&bg=0099ff&txtclr=ffffff&txt=300%C3%97300&w=300&h=300&fm=png';
   this.paid =  false;
   this.approved = false;
   return this;

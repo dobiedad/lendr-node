@@ -7,7 +7,7 @@ function AuthService(firebaseApp) {
 AuthService.prototype.signIn = function () {
   var self = this;
   var provider = new firebase.auth.FacebookAuthProvider();
-  provider.addScope('email')
+  provider.addScope('email,public_profile,user_friends')
   return this.firebaseApp.auth().signInWithPopup(provider).then(function(result) {
     var token = result.credential.accessToken;
 
@@ -17,6 +17,7 @@ AuthService.prototype.signIn = function () {
       name:result.user.displayName,
       img:result.user.photoURL
     }
+    debugger;
     console.log(result.user)
     return self.createUser(user)
   }).catch(function(error) {
