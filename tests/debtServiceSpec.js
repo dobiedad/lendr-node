@@ -42,10 +42,10 @@ describe('Debt Service', function() {
         })
     });
 
-    it('loads all my debtors', function() {
+    it('loads my debtors', function() {
       var myFbId = "topdon" + shortid()
-      var myDebt = debtBuilder().valid().withLender(myFbId).build()
-      var myDebt2 = debtBuilder().valid().withLender(myFbId).build()
+      var myDebt = debtBuilder().valid().withLender(myFbId).withApproved().build()
+      var myDebt2 = debtBuilder().valid().withLender(myFbId).withApproved().build()
       var otherDebt = debtBuilder().valid().build()
 
       var model = {
@@ -67,10 +67,10 @@ describe('Debt Service', function() {
         })
     });
 
-    xit('loads all my lenders', function() {
+    xit('loads my lenders', function() {
       var myFbId = "topdon" + shortid()
-      var myDebt = debtBuilder().valid().withDebtor(myFbId).build()
-      var myDebt2 = debtBuilder().valid().withDebtor(myFbId).build()
+      var myDebt = debtBuilder().valid().withDebtor(myFbId).withApproved().build()
+      var myDebt2 = debtBuilder().valid().withDebtor(myFbId).withApproved().build()
       var otherDebt = debtBuilder().valid().build()
 
       var model = {

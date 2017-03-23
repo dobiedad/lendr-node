@@ -46,6 +46,11 @@ DebtBuilder.prototype.withAmount = function(amount) {
   return this
 };
 
+DebtBuilder.prototype.withApproved = function(amount) {
+  this.approved = true
+  return this
+};
+
 DebtBuilder.prototype.withPaid = function(paid) {
   this.paid = paid
   return this

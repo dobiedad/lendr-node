@@ -58,8 +58,8 @@ ul {
 
 .table-section {
   padding: 0px;
-  margin-top: 5px;
-  margin-bottom: 5px;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
 .navbar {
@@ -89,6 +89,7 @@ ul {
 
 .cell-image {
   width: 60px;
+  height: 60px;
   float: left;
   border-radius: 50%;
   border: 2px solid #16a085;
@@ -123,6 +124,7 @@ h3{
 .menu-buttons{
   text-align: left;
   margin-top: 20px;
+  margin-bottom: 5px;
 }
 
 .back{

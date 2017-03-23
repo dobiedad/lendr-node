@@ -6,7 +6,10 @@ function Model(options) {
   this.authService = null;
   this.debtService = null;
   this.currentUser = null;
-  this.debts = {};
+  this.debts = {
+    pending:{},
+    approved:{}
+  };
   this.title = 'lendr';
   for (var key in options) {
     if (typeof(this[key]) == 'undefined') {
