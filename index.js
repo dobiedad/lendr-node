@@ -8,21 +8,38 @@ var m = new Model(services.createServices());
 
 function render(model) {
   model.refresh = h.refresh;
+  if(!model.currentUser){
+     model.checkAuthenticated()
+  }
   return h('div',
-    h('button', {
+    model.currentUser ?
+    h('div',
+      h('div.navbar',model.title),
+      renderHome(model)
+    )
+   : renderLogin(model)
+  );
+}
+
+function renderLogin(model) {
+  return h('div.container',
+    h('img.logo', {
+      src: 'logo.png' }),
+    h('button.login-button', {
       title: 'Login',
       onclick: function() {
         model.login()
       }
-    }, 'Login'),
+    }, '')
+  )
+}
 
-    model.currentUser ?
-    h('div',
+function renderHome(model) {
+  return h('div.container',
     h('h2',model.currentUser.name),
       h('img', {
         src: model.currentUser.img })
-    ) : model.checkAuthenticated() 
-  );
+  )
 }
 
 hyperdom.append(document.body, render, m);

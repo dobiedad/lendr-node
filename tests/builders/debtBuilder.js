@@ -12,8 +12,6 @@ function DebtBuilder() {
 
 }
 
-
-
 DebtBuilder.prototype.valid = function() {
   this.id = shortid.generate();
   this.debtor = shortid.generate();
@@ -31,6 +29,16 @@ DebtBuilder.prototype.valid = function() {
 
 DebtBuilder.prototype.build = function() {
   return new Debt(this);
+};
+
+DebtBuilder.prototype.withLender = function(lender) {
+  this.lender = lender
+  return this
+};
+
+DebtBuilder.prototype.withDebtor = function(debtor) {
+  this.debtor = debtor
+  return this
 };
 
 module.exports = function() {

@@ -6,7 +6,7 @@ function Model(options) {
   this.authService = null;
   this.debtService = null;
   this.currentUser = null;
-
+  this.title = 'lendr';
   for (var key in options) {
     if (typeof(this[key]) == 'undefined') {
       throw new Error('Invalid model option ' + key);
