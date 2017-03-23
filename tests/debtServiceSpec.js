@@ -91,6 +91,20 @@ describe('Debt Service', function() {
         })
     });
 
+    it('calculates total i owe', function() {
+      var myFbId = "topdon" + shortid()
+      var myDebt = debtBuilder().valid().withDebtor(myFbId).withAmount("10.03").build()
+      var myDebt2 = debtBuilder().valid().withDebtor(myFbId).withAmount("15.50").build()
+      var myDebt3 = debtBuilder().valid().withDebtor(myFbId).withPaid(true).build()
+
+      var debts = [myDebt,myDebt2,myDebt3]
+
+      return debtService.calculateTotal(debts)
+        .then(function (res) {
+          return expect(res).to.eql("25.53")
+        })
+    });
+
   });
 
 });

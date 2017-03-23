@@ -41,6 +41,16 @@ DebtService.prototype.loadLenders = function (model) {
     })
 };
 
+DebtService.prototype.calculateTotal = function (debts) {
+  var total  = 0;
+  for (var debt of debts) {
+    if(!debt.paid){
+      total = total + parseFloat(debt.amount)
+    }
+ }
+ return Promise.resolve(total.toString())
+};
+
 function enumerateDebt(object) {
   return Object.keys(object || {}).map(function(uid) {
     var debt = object[uid];

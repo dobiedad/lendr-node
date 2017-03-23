@@ -41,6 +41,16 @@ DebtBuilder.prototype.withDebtor = function(debtor) {
   return this
 };
 
+DebtBuilder.prototype.withAmount = function(amount) {
+  this.amount = amount
+  return this
+};
+
+DebtBuilder.prototype.withPaid = function(paid) {
+  this.paid = paid
+  return this
+};
+
 module.exports = function() {
   return new DebtBuilder();
 };
