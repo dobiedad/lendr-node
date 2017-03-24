@@ -70,6 +70,9 @@ button:focus {outline:0;}
   left: 0;
   right: 0;
 }
+.paid-large{
+  max-width: 100%;
+}
 .main {
   background-color: #0E353B;
   min-height: 100vh;
@@ -338,6 +341,7 @@ a {
   display: inline-block;
   position: absolute;
   left: 15%;
+  min-width: 80px;
 }
 
 .info-right {
@@ -345,4 +349,24 @@ a {
   display: inline-block;
   position: absolute;
   right: 15%;
+  min-width: 80px;
+}
+
+@media (max-width:600px) {
+  .info-left {
+    left: 5%;
+  }
+
+  .info-right {
+    right: 5%;
+  }
+  .cell{
+    line-height: normal;
+  }
+  .paid{
+    opacity: 0.3
+  }
+  h1{
+    font-size: 16px;
+  }
 }
