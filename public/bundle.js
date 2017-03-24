@@ -70,7 +70,7 @@ Model.prototype.login = function() {
   return this.authService.signIn()
     .then(function (user) {
       self.currentUser = user
-      self.liends()
+      self.loadFiends()
       self.refresh()
       return user
     })
