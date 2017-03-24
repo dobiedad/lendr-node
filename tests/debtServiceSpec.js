@@ -53,7 +53,6 @@ describe('Debt Service', function() {
         currentUser:{ fbid : myFbId}
       }
 
-      console.log(myDebt.lender)
       return debtService.create(myDebt)
         .then(function () {
           return debtService.create(myDebt2)

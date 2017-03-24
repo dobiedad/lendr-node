@@ -70,11 +70,9 @@ Model.prototype.login = function() {
   return this.authService.signIn()
     .then(function (user) {
       self.currentUser = user
+      self.liends()
       self.refresh()
-      return self.loadFriends()
-        .then(function (res) {
-          self.friends = res
-        })
+      return user
     })
 };
 
@@ -88,7 +86,7 @@ Model.prototype.logout = function() {
 };
 
 Model.prototype.loadFriends = function () {
-  return this.authService.loadFriends()
+  this.authService.loadFriends(this)
 };
 
 Model.prototype.calculateTotal = function(debts) {
@@ -170,12 +168,9 @@ Model.prototype.checkAuthenticated = function() {
         return self.authService.loadMyProfile()
           .then(function (user) {
             self.currentUser = user;
+            self.loadFriends()
             self.refresh()
-            return self.loadFriends()
-              .then(function (res) {
-                self.friends = res
-                return online
-              })
+            return online
           })
       }
       return online
@@ -77554,17 +77549,11 @@ AuthService.prototype.signIn = function () {
   });
 };
 
-AuthService.prototype.loadFriends = function () {
+AuthService.prototype.loadFriends = function (model) {
   var self = this;
-  var promise = new Promise(function (resolve) {
-    FB.api('me/friends', {fields: ['picture.width(400).height(400),name,email'], limit:5000, access_token: window.localStorage.getItem('token')  }, function (result) {
-      console.log(returnListOfUsers(result.data))
-
-      resolve(returnListOfUsers(result.data))
-    });
-  })
-
-  return promise
+  FB.api('me/friends', {fields: ['picture.width(400).height(400),name,email'], limit:5000, access_token: window.localStorage.getItem('token')  }, function (result) {
+    model.friends = returnListOfUsers(result.data)
+  });
 };
 
 AuthService.prototype.signOut = function () {
@@ -77728,7 +77717,6 @@ var firebase = require("firebase");
 
 if (window.__env && window.__env.firebaseConfig) {
   app = firebase.initializeApp(window.__env.firebaseConfig);
-  console.log('env')
 } else {
   var config = require("../firebaseConfig")
   app = firebase.initializeApp(config);

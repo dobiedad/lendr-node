@@ -44,17 +44,11 @@ AuthService.prototype.signIn = function () {
   });
 };
 
-AuthService.prototype.loadFriends = function () {
+AuthService.prototype.loadFriends = function (model) {
   var self = this;
-  var promise = new Promise(function (resolve) {
-    FB.api('me/friends', {fields: ['picture.width(400).height(400),name,email'], limit:5000, access_token: window.localStorage.getItem('token')  }, function (result) {
-      console.log(returnListOfUsers(result.data))
-
-      resolve(returnListOfUsers(result.data))
-    });
-  })
-
-  return promise
+  FB.api('me/friends', {fields: ['picture.width(400).height(400),name,email'], limit:5000, access_token: window.localStorage.getItem('token')  }, function (result) {
+    model.friends = returnListOfUsers(result.data)
+  });
 };
 
 AuthService.prototype.signOut = function () {

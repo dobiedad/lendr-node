@@ -38,11 +38,9 @@ Model.prototype.login = function() {
   return this.authService.signIn()
     .then(function (user) {
       self.currentUser = user
+      self.liends()
       self.refresh()
-      return self.loadFriends()
-        .then(function (res) {
-          self.friends = res
-        })
+      return user
     })
 };
 
@@ -56,7 +54,7 @@ Model.prototype.logout = function() {
 };
 
 Model.prototype.loadFriends = function () {
-  return this.authService.loadFriends()
+  this.authService.loadFriends(this)
 };
 
 Model.prototype.calculateTotal = function(debts) {
@@ -138,12 +136,9 @@ Model.prototype.checkAuthenticated = function() {
         return self.authService.loadMyProfile()
           .then(function (user) {
             self.currentUser = user;
+            self.loadFriends()
             self.refresh()
-            return self.loadFriends()
-              .then(function (res) {
-                self.friends = res
-                return online
-              })
+            return online
           })
       }
       return online
