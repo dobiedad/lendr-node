@@ -38,7 +38,7 @@ Model.prototype.login = function() {
   return this.authService.signIn()
     .then(function (user) {
       self.currentUser = user
-      self.loadFiends()
+      self.loadFriends()
       self.refresh()
       return user
     })
