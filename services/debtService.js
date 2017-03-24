@@ -63,7 +63,7 @@ DebtService.prototype.calculateTotal = function (debts) {
       total = total + parseFloat(debt.amount)
     }
  }
- return Promise.resolve(total.toString())
+ return total.toString()
 };
 
 function enumerateApprovedDebt(object) {

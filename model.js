@@ -5,10 +5,19 @@ function Model(options) {
   this.screen = 'lendr';
   this.authService = null;
   this.debtService = null;
+  this.owed = 0;
+  this.owe = 0;
+  this.net = 0
   this.currentUser = null;
   this.debts = {
-    pending:{},
-    approved:{}
+    pending:{
+      debtors:[],
+      lenders:[]
+    },
+    approved:{
+      debtors:[],
+      lenders:[]
+    }
   };
   this.modal = {
 
@@ -40,10 +49,22 @@ Model.prototype.logout = function() {
     })
 };
 
+Model.prototype.calculateTotal = function(debts) {
+  return this.debtService.calculateTotal(debts)
+};
+
+Model.prototype.calculateNetForMe = function() {
+  var totalImOwed = parseFloat(this.debtService.calculateTotal(this.debts.approved.debtors))
+  var totalIOwe = parseFloat(this.debtService.calculateTotal(this.debts.approved.lenders))
+  return (totalImOwed - totalIOwe).toString()
+};
+
 Model.prototype.loadDebts = function() {
-  var self = this;
   this.debtService.loadDebtors(this)
   this.debtService.loadLenders(this)
+  this.owed = this.calculateTotal(this.debts.approved.debtors);
+  this.owe = this.calculateTotal(this.debts.approved.lenders);
+  this.net = this.calculateNetForMe()
 };
 
 Model.prototype.resolveDebt = function(debt) {

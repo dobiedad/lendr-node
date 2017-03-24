@@ -70,8 +70,18 @@ function renderLogin(model) {
 
 function renderHome(model) {
   return h('div.container',
+    h('div.info-left',
+      h('h1','Owe'),
+      h('h2',model.owe)
+    ),
     h('img.profile-image', {src: model.currentUser.img }),
-    h('h1',model.currentUser.name),
+    h('div.info-right',
+      h('h1','Owed'),
+      h('h2',model.owed)
+    ),
+    h('h3',model.currentUser.name),
+    h('h1','Net'),
+    h('h2',model.net),
     h('div.menu-buttons',
       h('button.main-button', {
         title: 'New Debt',
