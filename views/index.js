@@ -23,11 +23,9 @@ function render(model) {
     model.currentUser ?
     h('div.main',
       h('div.navbar',
-      model.screen != 'lendr'?
-        h('button.back',{onclick:function () {
-          model.screen = 'lendr'
-        }})
-      : undefined
+      model.screen == 'lendr'?
+        renderPowerButton(model)
+      : renderBackButton(model)
       ,model.screen),
       model.screen == 'lendr' ?
         renderHome(model)
@@ -43,6 +41,18 @@ function render(model) {
     )
    : renderLogin(model)
   );
+}
+
+function renderBackButton(model){
+  return h('button.back',{onclick:function () {
+    model.screen = 'lendr'
+  }})
+}
+
+function renderPowerButton(model){
+  return h('button.power',{onclick:function () {
+    return model.logout()
+  }})
 }
 
 function renderLogin(model) {
@@ -102,7 +112,7 @@ function renderTableForDebtors(model,debts){
   return debts.map(function(debt) {
     var paidLabel = debt.paid ? ' paid you ' : ' owes you '
     return h('li.cell',
-      h('a',{href:'#',onclick:function () {
+      h('a',{disabled:debt.paid,href:'#',onclick:!debt.paid ? function () {
         model.modal = {
           title:'Confirm',
           content:'Has ' + debt.debtorName + ' paid you ' + debt.amount + '?',
@@ -111,7 +121,7 @@ function renderTableForDebtors(model,debts){
           }}
         }
         model.refresh()
-      }},
+      }:undefined},
         h('img.cell-image', {src: debt.debtorImg }),
         h('div.text-container',debt.debtorName + paidLabel + debt.amount),
         debt.paid ?   h('div.paid') : undefined

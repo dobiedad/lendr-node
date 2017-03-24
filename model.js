@@ -31,6 +31,15 @@ Model.prototype.login = function() {
     })
 };
 
+Model.prototype.logout = function() {
+  var self = this;
+  return this.authService.signOut()
+    .then(function () {
+      self.currentUser = null
+      self.refresh()
+    })
+};
+
 Model.prototype.loadDebts = function() {
   var self = this;
   this.debtService.loadDebtors(this)

@@ -33,6 +33,11 @@ AuthService.prototype.signIn = function () {
   });
 };
 
+AuthService.prototype.signOut = function () {
+  var self = this;
+  return this.firebaseApp.auth().signOut()
+};
+
 AuthService.prototype.createUser = function (user) {
   var self = this;
 
