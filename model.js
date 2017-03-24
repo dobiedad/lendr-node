@@ -37,6 +37,7 @@ Model.prototype.login = function() {
     .then(function (user) {
       self.currentUser = user
       self.refresh()
+      return self.loadFriends()
     })
 };
 
@@ -47,6 +48,10 @@ Model.prototype.logout = function() {
       self.currentUser = null
       self.refresh()
     })
+};
+
+Model.prototype.loadFriends = function () {
+  return this.authService.loadFriends()
 };
 
 Model.prototype.calculateTotal = function(debts) {

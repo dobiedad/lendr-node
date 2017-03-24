@@ -1,4 +1,6 @@
 var firebase = require("firebase");
+var FB = require('fb'),
+    fb = new FB.Facebook({});
 
 function AuthService(firebaseApp) {
   this.firebaseApp = firebaseApp
@@ -10,16 +12,24 @@ AuthService.prototype.signIn = function () {
   provider.addScope('email,public_profile,user_friends')
   return this.firebaseApp.auth().signInWithPopup(provider).then(function(result) {
     var token = result.credential.accessToken;
+    FB.setAccessToken(token);
+    var promise = new Promise(function (resolve) {
+      FB.api('me', { fields: ['picture.width(400).height(400)'],limit:5000, access_token: token }, function (res) {
+        var user = {
+          fbid:result.user.providerData[0].uid,
+          email:result.user.email,
+          name:result.user.displayName,
+          img:res.picture.data.url
+        }
+        resolve(user)
+      });
+    })
 
-    var user = {
-      fbid:result.user.providerData[0].uid,
-      email:result.user.email,
-      name:result.user.displayName,
-      img:result.user.photoURL
-    }
-    debugger;
-    console.log(result.user)
-    return self.createUser(user)
+    return promise
+      .then(function (user) {
+        console.log(user);
+        return self.createUser(user)
+      })
   }).catch(function(error) {
     // Handle Errors here.
     var errorCode = error.code;
@@ -31,6 +41,18 @@ AuthService.prototype.signIn = function () {
     var credential = error.credential;
     // ...
   });
+};
+
+AuthService.prototype.loadFriends = function () {
+  var self = this;
+  var promise = new Promise(function (resolve) {
+    FB.api('me/friends', {limit:5000 }, function (res) {
+      console.log(res)
+      resolve(res)
+    });
+  })
+
+  return promise
 };
 
 AuthService.prototype.signOut = function () {

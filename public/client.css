@@ -120,6 +120,8 @@ h3{
 .profile-image {
   border-radius: 50%;
   border: 3px solid #16a085;
+  width: 130px;
+  margin-bottom: 30px;
 }
 
 .main-button{
