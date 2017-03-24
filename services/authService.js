@@ -12,6 +12,7 @@ AuthService.prototype.signIn = function () {
   provider.addScope('email,public_profile,user_friends')
   return this.firebaseApp.auth().signInWithPopup(provider).then(function(result) {
     var token = result.credential.accessToken;
+    window.localStorage.setItem('token', token);
     FB.setAccessToken(token);
     var promise = new Promise(function (resolve) {
       FB.api('me', { fields: ['picture.width(400).height(400)'],limit:5000, access_token: token }, function (res) {
@@ -46,7 +47,7 @@ AuthService.prototype.signIn = function () {
 AuthService.prototype.loadFriends = function () {
   var self = this;
   var promise = new Promise(function (resolve) {
-    FB.api('me/friends', {fields: ['picture.width(400).height(400),name,email'], limit:5000 }, function (result) {
+    FB.api('me/friends', {fields: ['picture.width(400).height(400),name,email'], limit:5000, access_token: window.localStorage.getItem('token')  }, function (result) {
       console.log(returnListOfUsers(result.data))
 
       resolve(returnListOfUsers(result.data))
