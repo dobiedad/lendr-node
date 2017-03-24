@@ -11,6 +11,10 @@ DebtService.prototype.create = function (debt) {
     })
 };
 
+DebtService.prototype.delete = function (debt) {
+  return this.firebaseApp.database().ref('debt/' + debt.id).remove()
+};
+
 DebtService.prototype.approve = function (debt) {
   debt.approved = true
   return this.create(debt)

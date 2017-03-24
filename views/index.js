@@ -5,6 +5,7 @@ var services = require('../services');
 var notifications = require('./notifications');
 var newDebt = require('./newDebt');
 var modal = require('./modal')
+var userProfile = require('./userProfile')
 
 var m = new Model(services.createServices());
 
@@ -25,8 +26,10 @@ function render(model) {
       h('div.navbar',
       model.screen == 'lendr'?
         renderPowerButton(model)
-      : renderBackButton(model)
-      ,model.screen),
+      : renderBackButton(model),
+      model.screen == 'New Debt' ?
+        renderFacebookInviteButton() : undefined
+      ,model.screen != 'User Profile' ? model.screen : model.viewingDebtUser.name),
       model.screen == 'lendr' ?
         renderHome(model)
       : undefined,
@@ -35,6 +38,9 @@ function render(model) {
       : undefined,
       model.screen == 'Notifications' ?
       notifications(model)
+      : undefined,
+      model.screen == 'User Profile' ?
+      userProfile(model)
       : undefined,
       model.modal.title ?
       modal(model) : undefined
@@ -50,9 +56,26 @@ function renderBackButton(model){
 }
 
 function renderPowerButton(model){
-  return h('button.power',{onclick:function () {
+  return h('button.nav-right.power',{onclick:function () {
     return model.logout()
   }})
+}
+
+function renderFacebookInviteButton(model){
+  return h('button.nav-right.fb-invite',{onclick:function () {
+    FBInvite()
+  }})
+}
+function FBInvite() {
+ FB.ui({
+   method: 'send',
+   link: 'http://www.lendr.tech',
+ },function(response) {
+  if (response) {
+
+  } else {
+  }
+ });
 }
 
 function renderLogin(model) {
@@ -112,7 +135,7 @@ function renderHome(model) {
         h('h2','friends who i owe')
       ),
       model.debts.approved.lenders ?
-      renderTableForLenders(model.debts.approved.lenders):undefined
+      renderTableForLenders(model,model.debts.approved.lenders):undefined
     )
   )
 }
@@ -122,16 +145,19 @@ function renderTableForDebtors(model,debts){
   return debts.map(function(debt) {
     var paidLabel = debt.paid ? ' paid you ' : ' owes you '
     return h('li.cell',
-      h('a',{disabled:debt.paid,href:'#',onclick:!debt.paid ? function () {
-        model.modal = {
-          title:'Confirm',
-          content:'Has ' + debt.debtorName + ' paid you ' + debt.amount + '?',
-          options: {href:'#',onclick:function () {
-            return model.resolveDebt(debt)
-          }}
+      h('a',{disabled:debt.paid,href:'#',onclick: function () {
+        model.screen = 'User Profile'
+        model.viewingDebtUser = {
+          fbid:debt.debtor,
+          name:debt.debtorName,
+          img:debt.debtorImg,
+          debt:debt,
+          type:'whereIamLender'
         }
+        model.calculateTotalIOweTo(debt.debtor)
+        model.calculateTotalImOwedFrom(debt.debtor)
         model.refresh()
-      }:undefined},
+      }},
         h('img.cell-image', {src: debt.debtorImg }),
         h('div.text-container',debt.debtorName + paidLabel + debt.amount),
         debt.paid ?   h('div.paid') : undefined
@@ -140,14 +166,27 @@ function renderTableForDebtors(model,debts){
   })
 }
 
-function renderTableForLenders(debts) {
+function renderTableForLenders(model,debts) {
       return debts.map(function(debt) {
         var paidLabel = debt.paid ? 'You paid ' : 'You owe '
         return h('li.cell',
+        h('a',{href:'#',onclick: function () {
+          model.screen = 'User Profile'
+          model.viewingDebtUser = {
+            fbid:debt.lender,
+            name:debt.lenderName,
+            img:debt.lenderImg,
+            debt:debt,
+            type:'whereIamDebtor'
+          }
+          model.calculateTotalIOweTo(debt.lender)
+          model.calculateTotalImOwedFrom(debt.lender)
+          model.refresh()
+        }},
           h('img.cell-image', {src: debt.lenderImg }),
           h('div.text-container',paidLabel + debt.lenderName + " " + debt.amount),
           debt.paid ?   h('div.paid') : undefined
-        )
+        ))
       })
 }
 

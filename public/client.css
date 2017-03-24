@@ -1,12 +1,15 @@
-## home
 @font-face {
-  font-family: FibonSans;
-  src: url("fibon.otf") format("opentype");
+    font-family: 'fibon_sanslight';
+    src: url('fibonsans-light-webfont.woff2') format('woff2'),
+         url('fibonsans-light-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
 }
 
 body,h1,h2,h3,div,button{
-  font-family:FibonSans;
   font-weight: 100 !important;
+  font-family:'fibon_sanslight';
 }
 
 h1{
@@ -42,6 +45,7 @@ button {
   border-color: transparent;
   background: transparent;
   cursor:pointer;
+  font-size: 18px;
 }
 button:focus {outline:0;}
 .login-button {
@@ -145,7 +149,8 @@ h3{
 .profile-image {
   border-radius: 50%;
   border: 3px solid #16a085;
-  width: 130px;
+  width: 140px;
+  height: 140px;
   margin-bottom: 30px;
 }
 
@@ -153,6 +158,40 @@ h3{
   background:#16a085;
   height: 40px;
   width: 49.5%;
+  color:white;
+  position: relative;
+}
+
+.resolve-button{
+  background:#16a085;
+  height: 40px;
+  width: 50%;
+  color:white;
+  position: relative;
+  display: block;
+  margin: auto;
+  margin-bottom: 10px;
+}
+
+.debt-content {
+  background: #0f2c32;
+  padding: 30px;
+  border-radius: 5px;
+  min-height: 410px;
+  position: relative;
+}
+.debt-buttons{
+  position: absolute;
+  margin: auto;
+  text-align: center;
+  left: 0;
+  right: 0;
+  bottom: 10%;
+}
+.delete-button{
+  background:#c0392b;
+  height: 40px;
+  width: 50%;
   color:white;
   position: relative;
 }
@@ -182,11 +221,18 @@ h3{
 }
 
 .power{
+  background-image: url('power.png');
+}
+
+.fb-invite{
+  background-image: url('fb-invite.png');
+}
+
+.nav-right{
   width: 50px;
   height: 50px;
   margin-top: 3px;
   margin-left: 0px;
-  background-image: url('power.png');
   background-size: 80% auto;
   background-color: transparent;
   background-repeat: no-repeat;

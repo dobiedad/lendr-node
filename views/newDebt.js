@@ -35,4 +35,5 @@ function renderTableForFriends(model){
   })
 }
 
+
 module.exports = renderNewDebt

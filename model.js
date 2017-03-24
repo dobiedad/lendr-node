@@ -10,6 +10,8 @@ function Model(options) {
   this.owe = 0;
   this.net = 0
   this.currentUser = null;
+  this.totalIOweTo = {} ;
+  this.totalImOwedFrom = {} ;
   this.debts = {
     pending:{
       debtors:[],
@@ -83,6 +85,32 @@ Model.prototype.resolveDebt = function(debt) {
 Model.prototype.approveDebt = function(debt) {
   var self = this;
   return this.debtService.approve(debt)
+};
+
+Model.prototype.calculateTotalIOweTo = function(id) {
+  var self = this;
+  var total = 0;
+  this.debts.approved.lenders.map(function (debt) {
+    if(debt.lender == id){
+      total = total + parseFloat(debt.amount)
+    }
+  })
+  this.totalIOweTo[id] = total
+};
+
+Model.prototype.calculateTotalImOwedFrom = function(id) {
+  var self = this;
+  var total = 0;
+  this.debts.approved.debtors.map(function (debt) {
+    if(debt.debtor == id){
+      total = total + parseFloat(debt.amount)
+    }
+  })
+  this.totalImOwedFrom[id] = total
+};
+
+Model.prototype.deleteDebt = function(debt) {
+  return this.debtService.delete(debt)
 };
 
 Model.prototype.createDebtFor = function(options) {
