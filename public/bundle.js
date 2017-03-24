@@ -77834,11 +77834,17 @@ function renderLogin(model) {
   return h('div.container',
     h('img.logo-large', {
       src: 'logo.png' }),
-    h('button.login-button', {
+    h('a.login-button', {
       title: 'Login',
+      href: '#',
       onclick: function() {
         model.login()
       }
+    },
+    h('h2.login-title','login'),
+     ''),
+    h('a.appstore', {
+      href:"https://itunes.apple.com/us/app/lendr/id1216968765?ls=1&mt=8"
     }, '')
   )
 }

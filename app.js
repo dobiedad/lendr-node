@@ -7,7 +7,7 @@ app.get('/', function (req, res) {
   res.sendFile(__dirname + '/public/index.html');
 });
 
-app.listen(process.env.PORT || 5000, function () {
+app.listen(process.env.PORT || 1234, function () {
   console.log('listening on port 1234!');
 });
 

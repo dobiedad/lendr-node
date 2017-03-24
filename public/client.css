@@ -60,9 +60,16 @@ button:focus {outline:0;}
   background-size: 100%;
   background-color: transparent;
   margin: auto;
+  margin-bottom: 70px;
   display: block
 }
-
+.login-title{
+  margin-top: 120px;
+  position: absolute;
+  text-align: center;
+  left: 0;
+  right: 0;
+}
 .main {
   background-color: #0E353B;
   min-height: 100vh;
@@ -225,6 +232,20 @@ h3{
   background-position: 5% 50%;
   position: absolute;
   left: 5px;
+}
+
+
+.appstore {
+  width: 155px;
+  height: 53px;
+  margin-top: 30px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: auto;
+  background-image: url('appstore.png');
+  display: block;
+  background-size: 100%;
+  background-position: 50% 50%;
 }
 
 .power{
