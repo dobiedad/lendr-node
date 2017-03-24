@@ -1,5 +1,7 @@
+var shortid = require('shortid');
+
 function Debt(options) {
-  this.id = options.id;
+  this.id = options.id || shortid();
   this.debtor = options.debtor;
   this.lender = options.lender;
   this.amount = options.amount;

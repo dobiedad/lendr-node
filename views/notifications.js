@@ -26,15 +26,15 @@ function renderTableForPendingDebtors(model){
       h('a',{ href:'#', onclick:function () {
         model.modal = {
           title:'Confirm',
-          content:'You owe ' + debt.debtorName + ' ' + debt.amount + '?',
+          content:'You owe ' + debt.lenderName + ' ' + debt.amount + '?',
           options: {href:'#',onclick:function () {
             return model.approveDebt(debt)
           }}
         }
         model.refresh()
       }},
-      h('img.cell-image', {src: debt.debtorImg }),
-      h('div.text-container',debt.debtorName + ' claims you owe ' + debt.amount)
+      h('img.cell-image', {src: debt.lenderImg }),
+      h('div.text-container',debt.lenderName + ' claims you owe ' + debt.amount)
     ))
   })
 }
@@ -42,8 +42,8 @@ function renderTableForPendingDebtors(model){
 function renderTableForPendingLender(debts) {
   return debts.map(function(debt) {
     return h('li.cell',
-      h('img.cell-image', {src: debt.lenderImg }),
-      h('div.text-container','Waiting for ' + debt.lenderName + " to accept debt of " + debt.amount)
+      h('img.cell-image', {src: debt.debtorImg }),
+      h('div.text-container','Waiting for ' + debt.debtorName + " to accept debt of " + debt.amount)
     )
   })
 }

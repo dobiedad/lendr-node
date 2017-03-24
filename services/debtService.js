@@ -76,8 +76,9 @@ function enumerateApprovedDebt(object) {
     return debt;
   }).filter(function( element ) {
    return element !== undefined;
-});;
+ });
 }
+
 function enumeratePendingDebt(object) {
   return Object.keys(object || {}).map(function(uid) {
     var debt = object[uid];
@@ -88,6 +89,6 @@ function enumeratePendingDebt(object) {
     return debt
   }).filter(function( element ) {
    return element !== undefined;
-});;
+ });
 }
 module.exports = DebtService;

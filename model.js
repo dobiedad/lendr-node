@@ -1,4 +1,5 @@
 var shortid = require('shortid');
+var Debt  = require('./models/debt')
 
 function Model(options) {
   options = options || {};
@@ -19,9 +20,8 @@ function Model(options) {
       lenders:[]
     }
   };
-  this.modal = {
-
-  }
+  this.modal = {};
+  this.friends = [];
   this.title = 'lendr';
   for (var key in options) {
     if (typeof(this[key]) == 'undefined') {
@@ -38,6 +38,9 @@ Model.prototype.login = function() {
       self.currentUser = user
       self.refresh()
       return self.loadFriends()
+        .then(function (res) {
+          self.friends = res
+        })
     })
 };
 
@@ -82,6 +85,23 @@ Model.prototype.approveDebt = function(debt) {
   return this.debtService.approve(debt)
 };
 
+Model.prototype.createDebtFor = function(options) {
+  var self = this;
+
+  var obj = {
+    debtor : options.fbid,
+    debtorName : options.name,
+    debtorImg : options.img,
+    lender : this.currentUser.fbid,
+    lenderImg :this.currentUser.img,
+    lenderName : this.currentUser.name,
+    amount : this.newDebtAmount
+  }
+  var debt = new Debt(obj)
+  console.log(debt)
+  return this.debtService.create(debt)
+};
+
 Model.prototype.checkAuthenticated = function() {
   var self = this;
   return this.authService.checkAuthenticated()
@@ -91,7 +111,11 @@ Model.prototype.checkAuthenticated = function() {
           .then(function (user) {
             self.currentUser = user;
             self.refresh()
-            return online
+            return self.loadFriends()
+              .then(function (res) {
+                self.friends = res
+                return online
+              })
           })
       }
       return online

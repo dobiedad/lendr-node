@@ -46,9 +46,10 @@ AuthService.prototype.signIn = function () {
 AuthService.prototype.loadFriends = function () {
   var self = this;
   var promise = new Promise(function (resolve) {
-    FB.api('me/friends', {limit:5000 }, function (res) {
-      console.log(res)
-      resolve(res)
+    FB.api('me/friends', {fields: ['picture.width(400).height(400),name,email'], limit:5000 }, function (result) {
+      console.log(returnListOfUsers(result.data))
+
+      resolve(returnListOfUsers(result.data))
     });
   })
 
@@ -76,10 +77,8 @@ AuthService.prototype.checkAuthenticated = function () {
 
 AuthService.prototype.loadMyProfile = function () {
   var self = this;
-    console.log( this.firebaseApp.getCurrentUserId())
   return this.firebaseApp.database().ref('firebaseIds/' + this.firebaseApp.getCurrentUserId()).once('value')
     .then(function (snapshot) {
-
       return self.loadUserWithFbid(snapshot.val())
     })
 };
@@ -99,5 +98,16 @@ AuthService.prototype.mapToFbId = function (user) {
 };
 
 
+function returnListOfUsers(array) {
+  return array.map(function (fbUser) {
+    var user = {
+      fbid:fbUser.id,
+      email:fbUser.email ? fbUser.email : '',
+      name:fbUser.name,
+      img:fbUser.picture.data.url
+    }
+    return user
+  })
+}
 
 module.exports =  AuthService
