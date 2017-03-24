@@ -14,6 +14,10 @@ body,h1,h2,h3,div,button{
 
 h1{
   font-size: 20px;
+  color:#16a085
+}
+.amount{
+  color: #139cd5;
 }
 
 body {
@@ -151,7 +155,7 @@ h3{
   border: 3px solid #16a085;
   width: 140px;
   height: 140px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .main-button{
@@ -202,10 +206,13 @@ h3{
 
 .menu-buttons{
   text-align: left;
-  margin-top: 20px;
+  margin-top: 40px;
   margin-bottom: 5px;
 }
 
+.debt{
+  color:#c0392b
+}
 .back{
   width: 50px;
   height: 50px;

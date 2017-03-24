@@ -18,18 +18,18 @@ function renderUserProfile(model) {
   return h('div.container',
   h('div.info-left',
     h('h1','You Owe'),
-    h('h2',"£"+obj.owe)
+    h('h2.amount',"£"+obj.owe)
   ),
   h('img.profile-image', {src: model.viewingDebtUser.img }),
   h('div.info-right',
     h('h1','Owes you'),
-    h('h2',"£"+obj.owed)
+    h('h2.amount',"£"+obj.owed)
   ),
   h('h1','Net'),
   h('h2',"£" + (obj.owed - obj.owe)),
   h('div.debt-content',
     h('h1','Debt'),
-    h('h2',"£" + model.viewingDebtUser.debt.amount),
+    h('h2.debt',"£" + model.viewingDebtUser.debt.amount),
     model.viewingDebtUser.debt.paid ?
       h('img.paid-large', {src: 'paid_straight.png' })
     : undefined,
