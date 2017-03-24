@@ -15,7 +15,7 @@ function renderTableForFriends(model){
     return h('li.cell',
       h('a',{href:'#',onclick:function () {
         model.modal = {
-          title:'New Debt',
+          title:'Create',
           content:'How much does ' + friend.name + ' owe you ?',
           options: { href:'#', onclick:function () {
             return model.createDebtFor(friend)

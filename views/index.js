@@ -95,16 +95,16 @@ function renderHome(model) {
   return h('div.container',
     h('div.info-left',
       h('h1','Owe'),
-      h('h2',model.owe)
+      h('h2',"£"+model.owe)
     ),
     h('img.profile-image', {src: model.currentUser.img }),
     h('div.info-right',
       h('h1','Owed'),
-      h('h2',model.owed)
+      h('h2',"£"+model.owed)
     ),
     h('h3',model.currentUser.name),
     h('h1','Net'),
-    h('h2',model.net),
+    h('h2',"£"+model.net),
     h('div.menu-buttons',
       h('button.main-button', {
         title: 'New Debt',
@@ -159,7 +159,7 @@ function renderTableForDebtors(model,debts){
         model.refresh()
       }},
         h('img.cell-image', {src: debt.debtorImg }),
-        h('div.text-container',debt.debtorName + paidLabel + debt.amount),
+        h('div.text-container',debt.debtorName + paidLabel + "£"+ debt.amount),
         debt.paid ?   h('div.paid') : undefined
       )
     )
@@ -184,7 +184,7 @@ function renderTableForLenders(model,debts) {
           model.refresh()
         }},
           h('img.cell-image', {src: debt.lenderImg }),
-          h('div.text-container',paidLabel + debt.lenderName + " " + debt.amount),
+          h('div.text-container',paidLabel + debt.lenderName + " £" + debt.amount),
           debt.paid ?   h('div.paid') : undefined
         ))
       })

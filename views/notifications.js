@@ -26,7 +26,7 @@ function renderTableForPendingDebtors(model){
       h('a',{ href:'#', onclick:function () {
         model.modal = {
           title:'Confirm',
-          content:'You owe ' + debt.lenderName + ' ' + debt.amount + '?',
+          content:'You owe ' + debt.lenderName + ' ' + "£"+ debt.amount + '?',
           options: {href:'#',onclick:function () {
             return model.approveDebt(debt)
           }}
