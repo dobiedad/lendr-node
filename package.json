@@ -14,12 +14,7 @@
     "browser-monkey": "^1.29.2",
     "chai": "^3.5.0",
     "electron-prebuilt": "^1.2.1",
-    "karma": "^0.13.22",
-    "karma-browserify": "^5.0.5",
-    "karma-electron-launcher": "^0.1.0",
-    "karma-mocha": "^1.0.1",
     "shortid": "2.2.6",
-    "karma-mocha-reporter": "^2.0.4",
     "mocha": "^2.5.3",
     "watchify": "^3.7.0"
   },
