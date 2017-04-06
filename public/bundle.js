@@ -115,11 +115,13 @@ Model.prototype.loadDebts = function() {
 
 Model.prototype.resolveDebt = function(debt) {
   var self = this;
+  self.modal = {}
   return this.debtService.resolve(debt)
 };
 
 Model.prototype.approveDebt = function(debt) {
   var self = this;
+  self.modal = {}
   return this.debtService.approve(debt)
 };
 
@@ -146,6 +148,8 @@ Model.prototype.calculateTotalImOwedFrom = function(id) {
 };
 
 Model.prototype.deleteDebt = function(debt) {
+  var self = this;
+  self.modal = {}
   return this.debtService.delete(debt)
 };
 
@@ -181,6 +185,10 @@ Model.prototype.checkAuthenticated = function() {
       }
       return online
     })
+};
+
+Model.prototype.formatNumber = function(string) {
+  return string.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
 function filterFriendsForString(array, string) {
@@ -77867,12 +77875,12 @@ function renderHome(model) {
   return h('div.container',
     h('div.info-left',
       h('h1','Owe'),
-      h('h2.amount',"£"+model.owe)
+      h('h2.amount',"£"+model.formatNumber(model.owe))
     ),
     h('img.profile-image', {src: model.currentUser.img }),
     h('div.info-right',
       h('h1','Owed'),
-      h('h2.amount',"£"+model.owed)
+      h('h2.amount',"£"+model.formatNumber(model.owed))
     ),
     h('h3',model.currentUser.name),
     h('div.menu-buttons',
@@ -77915,7 +77923,8 @@ function renderTableForDebtors(model,debts){
   return debts.map(function(debt) {
     var paidLabel = debt.paid ? ' paid you ' : ' owes you '
     return h('li.cell',
-      h('a',{disabled:debt.paid,href:'#',onclick: function () {
+      h('a',{disabled:debt.paid,href:'#',onclick: function (e) {
+        e.preventDefault();
         model.screen = 'User Profile'
         model.viewingDebtUser = {
           fbid:debt.debtor,
@@ -77929,7 +77938,7 @@ function renderTableForDebtors(model,debts){
         model.refresh()
       }},
         h('img.cell-image', {src: debt.debtorImg }),
-        h('div.text-container',debt.debtorName + paidLabel + "£"+ debt.amount),
+        h('div.text-container',debt.debtorName + paidLabel + "£"+ model.formatNumber(debt.amount)),
         debt.paid ?   h('div.paid') : undefined
       )
     )
@@ -77940,7 +77949,8 @@ function renderTableForLenders(model,debts) {
       return debts.map(function(debt) {
         var paidLabel = debt.paid ? 'You paid ' : 'You owe '
         return h('li.cell',
-        h('a',{href:'#',onclick: function () {
+        h('a',{href:'#',onclick: function (e) {
+          e.preventDefault();
           model.screen = 'User Profile'
           model.viewingDebtUser = {
             fbid:debt.lender,
@@ -77954,7 +77964,7 @@ function renderTableForLenders(model,debts) {
           model.refresh()
         }},
           h('img.cell-image', {src: debt.lenderImg }),
-          h('div.text-container',paidLabel + debt.lenderName + " £" + debt.amount),
+          h('div.text-container',paidLabel + debt.lenderName + " £" + model.formatNumber(debt.amount)),
           debt.paid ?   h('div.paid') : undefined
         ))
       })
@@ -78025,7 +78035,8 @@ function renderTableForFriends(model){
   return array.length > 0 ?
     array.map(function(friend) {
       return h('li.cell',
-        h('a',{href:'#',onclick:function () {
+        h('a',{href:'#',onclick:function (e) {
+          e.preventDefault();
           model.modal = {
             title:'Create',
             content:'How much does ' + friend.name + ' owe you ?',
@@ -78069,7 +78080,7 @@ function renderNotifications(model) {
         h('h3','friends who owe me money')
       ),
       model.debts.pending.lenders ?
-      renderTableForPendingLender(model.debts.pending.debtors):undefined
+      renderTableForPendingLender(model,model.debts.pending.debtors):undefined
     )
   )
 }
@@ -78077,10 +78088,11 @@ function renderNotifications(model) {
 function renderTableForPendingDebtors(model){
   return model.debts.pending.lenders.map(function(debt) {
     return h('li.cell',
-      h('a',{ href:'#', onclick:function () {
+      h('a',{ href:'#', onclick:function (e) {
+        e.preventDefault();
         model.modal = {
           title:'Confirm',
-          content:'You owe ' + debt.lenderName + ' ' + "£"+ debt.amount + '?',
+          content:'You owe ' + debt.lenderName + ' ' + "£"+ model.formatNumber(debt.amount) + '?',
           options: {href:'#',onclick:function () {
             return model.approveDebt(debt)
           }}
@@ -78088,17 +78100,28 @@ function renderTableForPendingDebtors(model){
         model.refresh()
       }},
       h('img.cell-image', {src: debt.lenderImg }),
-      h('div.text-container',debt.lenderName + ' claims you owe ' + debt.amount)
+      h('div.text-container',debt.lenderName + ' claims you owe ' + model.formatNumber(debt.amount))
     ))
   })
 }
 
-function renderTableForPendingLender(debts) {
+function renderTableForPendingLender(model,debts) {
   return debts.map(function(debt) {
     return h('li.cell',
+    h('a',{ href:'#', onclick:function (e) {
+      e.preventDefault();
+      model.modal = {
+        title:'Confirm',
+        content:'Cancel debt of £ ' + model.formatNumber(debt.amount) + ' for ' + debt.debtorName,
+        options: {href:'#',onclick:function () {
+          return model.deleteDebt(debt)
+        }}
+      }
+      model.refresh()
+    }},
       h('img.cell-image', {src: debt.debtorImg }),
-      h('div.text-container','Waiting for ' + debt.debtorName + " to accept debt of " + debt.amount)
-    )
+      h('div.text-container','Waiting for ' + debt.debtorName + " to accept debt of £" + model.formatNumber(debt.amount))
+    ))
   })
 }
 

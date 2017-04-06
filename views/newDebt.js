@@ -29,7 +29,8 @@ function renderTableForFriends(model){
   return array.length > 0 ?
     array.map(function(friend) {
       return h('li.cell',
-        h('a',{href:'#',onclick:function () {
+        h('a',{href:'#',onclick:function (e) {
+          e.preventDefault();
           model.modal = {
             title:'Create',
             content:'How much does ' + friend.name + ' owe you ?',

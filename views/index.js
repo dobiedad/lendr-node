@@ -101,12 +101,12 @@ function renderHome(model) {
   return h('div.container',
     h('div.info-left',
       h('h1','Owe'),
-      h('h2.amount',"£"+model.owe)
+      h('h2.amount',"£"+model.formatNumber(model.owe))
     ),
     h('img.profile-image', {src: model.currentUser.img }),
     h('div.info-right',
       h('h1','Owed'),
-      h('h2.amount',"£"+model.owed)
+      h('h2.amount',"£"+model.formatNumber(model.owed))
     ),
     h('h3',model.currentUser.name),
     h('div.menu-buttons',
@@ -149,7 +149,8 @@ function renderTableForDebtors(model,debts){
   return debts.map(function(debt) {
     var paidLabel = debt.paid ? ' paid you ' : ' owes you '
     return h('li.cell',
-      h('a',{disabled:debt.paid,href:'#',onclick: function () {
+      h('a',{disabled:debt.paid,href:'#',onclick: function (e) {
+        e.preventDefault();
         model.screen = 'User Profile'
         model.viewingDebtUser = {
           fbid:debt.debtor,
@@ -163,7 +164,7 @@ function renderTableForDebtors(model,debts){
         model.refresh()
       }},
         h('img.cell-image', {src: debt.debtorImg }),
-        h('div.text-container',debt.debtorName + paidLabel + "£"+ debt.amount),
+        h('div.text-container',debt.debtorName + paidLabel + "£"+ model.formatNumber(debt.amount)),
         debt.paid ?   h('div.paid') : undefined
       )
     )
@@ -174,7 +175,8 @@ function renderTableForLenders(model,debts) {
       return debts.map(function(debt) {
         var paidLabel = debt.paid ? 'You paid ' : 'You owe '
         return h('li.cell',
-        h('a',{href:'#',onclick: function () {
+        h('a',{href:'#',onclick: function (e) {
+          e.preventDefault();
           model.screen = 'User Profile'
           model.viewingDebtUser = {
             fbid:debt.lender,
@@ -188,7 +190,7 @@ function renderTableForLenders(model,debts) {
           model.refresh()
         }},
           h('img.cell-image', {src: debt.lenderImg }),
-          h('div.text-container',paidLabel + debt.lenderName + " £" + debt.amount),
+          h('div.text-container',paidLabel + debt.lenderName + " £" + model.formatNumber(debt.amount)),
           debt.paid ?   h('div.paid') : undefined
         ))
       })

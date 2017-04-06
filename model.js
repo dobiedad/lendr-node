@@ -83,11 +83,13 @@ Model.prototype.loadDebts = function() {
 
 Model.prototype.resolveDebt = function(debt) {
   var self = this;
+  self.modal = {}
   return this.debtService.resolve(debt)
 };
 
 Model.prototype.approveDebt = function(debt) {
   var self = this;
+  self.modal = {}
   return this.debtService.approve(debt)
 };
 
@@ -114,6 +116,8 @@ Model.prototype.calculateTotalImOwedFrom = function(id) {
 };
 
 Model.prototype.deleteDebt = function(debt) {
+  var self = this;
+  self.modal = {}
   return this.debtService.delete(debt)
 };
 
@@ -149,6 +153,10 @@ Model.prototype.checkAuthenticated = function() {
       }
       return online
     })
+};
+
+Model.prototype.formatNumber = function(string) {
+  return string.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
 function filterFriendsForString(array, string) {
