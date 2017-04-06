@@ -44,6 +44,7 @@ function Model(options) {
   this.currentUser = null;
   this.totalIOweTo = {} ;
   this.friendsQuery = ""
+  this.loaded = false
   this.searchResults = [];
   this.totalImOwedFrom = {} ;
   this.debts = {
@@ -77779,47 +77780,53 @@ var services = require('../services');
 var notifications = require('./notifications');
 var newDebt = require('./newDebt');
 var modal = require('./modal')
+var loader = require('./loader')
+
 var userProfile = require('./userProfile')
 
 var m = new Model(services.createServices());
 
 function render(model) {
   model.refresh = h.refresh;
-  if(!model.currentUser){
+  if(!model.currentUser && !model.loaded){
      model.checkAuthenticated()
+      .then(function () {
+        model.loaded = true;
+        model.refresh()
+      })
   }
-  else{
+  else if(model.currentUser){
     if(!model.debts.lenders || !model.debts.debtors){
        model.loadDebts()
     }
   }
 
   return h('div',
-    model.currentUser ?
-    h('div.main',
-      h('div.navbar',
-      model.screen == 'lendr'?
-        renderPowerButton(model)
-      : renderBackButton(model),
-      model.screen == 'New Debt' ?
-        renderFacebookInviteButton() : undefined
-      ,model.screen != 'User Profile' ? model.screen : model.viewingDebtUser.name),
-      model.screen == 'lendr' ?
-        renderHome(model)
-      : undefined,
-      model.screen == 'New Debt' ?
-        newDebt(model)
-      : undefined,
-      model.screen == 'Notifications' ?
-      notifications(model)
-      : undefined,
-      model.screen == 'User Profile' ?
-      userProfile(model)
-      : undefined,
-      model.modal.title ?
-      modal(model) : undefined
-    )
-   : renderLogin(model)
+  model.currentUser ?
+  h('div.main',
+    h('div.navbar',
+    model.screen == 'lendr'?
+      renderPowerButton(model)
+    : renderBackButton(model),
+    model.screen == 'New Debt' ?
+      renderFacebookInviteButton() : undefined
+    ,model.screen != 'User Profile' ? model.screen : model.viewingDebtUser.name),
+    model.screen == 'lendr' ?
+      renderHome(model)
+    : undefined,
+    model.screen == 'New Debt' ?
+      newDebt(model)
+    : undefined,
+    model.screen == 'Notifications' ?
+    notifications(model)
+    : undefined,
+    model.screen == 'User Profile' ?
+    userProfile(model)
+    : undefined,
+    model.modal.title ?
+    modal(model) : undefined
+  )
+  : renderLogin(model)
   );
 }
 
@@ -77856,6 +77863,12 @@ function renderLogin(model) {
   return h('div.container',
     h('img.logo-large', {
       src: 'logo.png' }),
+      !model.loaded ?
+        h('div.loading',
+          h('span','loading'),
+          renderDots()
+        )
+      :
     h('a.login-button', {
       title: 'Login',
       href: '#',
@@ -77870,6 +77883,14 @@ function renderLogin(model) {
     }, '')
   )
 }
+
+function renderDots() {
+  return h("span.dots",
+    h("span", "."),
+    h("span", "."),
+    h("span", "."))
+}
+
 
 function renderHome(model) {
   return h('div.container',
@@ -77972,7 +77993,28 @@ function renderTableForLenders(model,debts) {
 
 hyperdom.append(document.body, render, m);
 
-},{"../model":2,"../services":537,"./modal":542,"./newDebt":543,"./notifications":544,"./userProfile":545,"hyperdom":328}],542:[function(require,module,exports){
+},{"../model":2,"../services":537,"./loader":542,"./modal":543,"./newDebt":544,"./notifications":545,"./userProfile":546,"hyperdom":328}],542:[function(require,module,exports){
+var hyperdom = require('hyperdom');
+var h = hyperdom.html;
+
+function renderLoader() {
+  return h("div.sk-circle",
+    h("div.sk-circle1.sk-child"),
+    h("div.sk-circle2.sk-child"),
+    h("div.sk-circle3.sk-child"),
+    h("div.sk-circle4.sk-child"),
+    h("div.sk-circle5.sk-child"),
+    h("div.sk-circle6.sk-child"),
+    h("div.sk-circle7.sk-child"),
+    h("div.sk-circle8.sk-child"),
+    h("div.sk-circle9.sk-child"),
+    h("div.sk-circle10.sk-child"),
+    h("div.sk-circle11.sk-child"),
+    h("div.sk-circle12.sk-child"))
+}
+module.exports = renderLoader
+
+},{"hyperdom":328}],543:[function(require,module,exports){
 var hyperdom = require('hyperdom');
 var h = hyperdom.html;
 
@@ -78003,7 +78045,7 @@ function renderModal(model) {
 
 module.exports = renderModal
 
-},{"hyperdom":328}],543:[function(require,module,exports){
+},{"hyperdom":328}],544:[function(require,module,exports){
 var hyperdom = require('hyperdom');
 var h = hyperdom.html;
 
@@ -78062,7 +78104,7 @@ function renderTableForFriends(model){
 
 module.exports = renderNewDebt
 
-},{"hyperdom":328}],544:[function(require,module,exports){
+},{"hyperdom":328}],545:[function(require,module,exports){
 var hyperdom = require('hyperdom');
 var h = hyperdom.html;
 
@@ -78127,7 +78169,7 @@ function renderTableForPendingLender(model,debts) {
 
 module.exports = renderNotifications
 
-},{"hyperdom":328}],545:[function(require,module,exports){
+},{"hyperdom":328}],546:[function(require,module,exports){
 var hyperdom = require('hyperdom');
 var h = hyperdom.html;
 

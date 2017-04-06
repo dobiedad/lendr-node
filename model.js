@@ -12,6 +12,7 @@ function Model(options) {
   this.currentUser = null;
   this.totalIOweTo = {} ;
   this.friendsQuery = ""
+  this.loaded = false
   this.searchResults = [];
   this.totalImOwedFrom = {} ;
   this.debts = {

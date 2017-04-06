@@ -5,47 +5,53 @@ var services = require('../services');
 var notifications = require('./notifications');
 var newDebt = require('./newDebt');
 var modal = require('./modal')
+var loader = require('./loader')
+
 var userProfile = require('./userProfile')
 
 var m = new Model(services.createServices());
 
 function render(model) {
   model.refresh = h.refresh;
-  if(!model.currentUser){
+  if(!model.currentUser && !model.loaded){
      model.checkAuthenticated()
+      .then(function () {
+        model.loaded = true;
+        model.refresh()
+      })
   }
-  else{
+  else if(model.currentUser){
     if(!model.debts.lenders || !model.debts.debtors){
        model.loadDebts()
     }
   }
 
   return h('div',
-    model.currentUser ?
-    h('div.main',
-      h('div.navbar',
-      model.screen == 'lendr'?
-        renderPowerButton(model)
-      : renderBackButton(model),
-      model.screen == 'New Debt' ?
-        renderFacebookInviteButton() : undefined
-      ,model.screen != 'User Profile' ? model.screen : model.viewingDebtUser.name),
-      model.screen == 'lendr' ?
-        renderHome(model)
-      : undefined,
-      model.screen == 'New Debt' ?
-        newDebt(model)
-      : undefined,
-      model.screen == 'Notifications' ?
-      notifications(model)
-      : undefined,
-      model.screen == 'User Profile' ?
-      userProfile(model)
-      : undefined,
-      model.modal.title ?
-      modal(model) : undefined
-    )
-   : renderLogin(model)
+  model.currentUser ?
+  h('div.main',
+    h('div.navbar',
+    model.screen == 'lendr'?
+      renderPowerButton(model)
+    : renderBackButton(model),
+    model.screen == 'New Debt' ?
+      renderFacebookInviteButton() : undefined
+    ,model.screen != 'User Profile' ? model.screen : model.viewingDebtUser.name),
+    model.screen == 'lendr' ?
+      renderHome(model)
+    : undefined,
+    model.screen == 'New Debt' ?
+      newDebt(model)
+    : undefined,
+    model.screen == 'Notifications' ?
+    notifications(model)
+    : undefined,
+    model.screen == 'User Profile' ?
+    userProfile(model)
+    : undefined,
+    model.modal.title ?
+    modal(model) : undefined
+  )
+  : renderLogin(model)
   );
 }
 
@@ -82,6 +88,12 @@ function renderLogin(model) {
   return h('div.container',
     h('img.logo-large', {
       src: 'logo.png' }),
+      !model.loaded ?
+        h('div.loading',
+          h('span','loading'),
+          renderDots()
+        )
+      :
     h('a.login-button', {
       title: 'Login',
       href: '#',
@@ -96,6 +108,14 @@ function renderLogin(model) {
     }, '')
   )
 }
+
+function renderDots() {
+  return h("span.dots",
+    h("span", "."),
+    h("span", "."),
+    h("span", "."))
+}
+
 
 function renderHome(model) {
   return h('div.container',
