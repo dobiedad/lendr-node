@@ -78153,13 +78153,13 @@ function renderUserProfile(model) {
   h('img.profile-image', {src: model.viewingDebtUser.img }),
   h('div.info-right',
     h('h1','Owes you'),
-    h('h2.amount',"£"+obj.owed)
+    h('h2.amount',"£"+model.formatNumber(obj.owed.toString()) )
   ),
   h('h1','Net'),
-  h('h2',"£" + (obj.owed - obj.owe)),
+  h('h2',"£" + model.formatNumber((obj.owed - obj.owe).toString())  ),
   h('div.debt-content',
     h('h1','Debt'),
-    h('h2.debt',"£" + model.viewingDebtUser.debt.amount),
+    h('h2.debt',"£" + model.formatNumber(model.viewingDebtUser.debt.amount)),
     model.viewingDebtUser.debt.paid ?
       h('img.paid-large', {src: 'paid_straight.png' })
     : undefined,
@@ -78168,7 +78168,7 @@ function renderUserProfile(model) {
       h('button.resolve-button',{onclick:function () {
         model.modal = {
           title:'Confirm',
-          content:'Has ' + model.viewingDebtUser.name + ' paid you ' + "£"+ model.viewingDebtUser.debt.amount + '?',
+          content:'Has ' + model.viewingDebtUser.name + ' paid you ' + "£"+ model.formatNumber(model.viewingDebtUser.debt.amount) + '?',
           options: {href:'#',onclick:function () {
             return model.resolveDebt(model.viewingDebtUser.debt)
               .then(function () {
