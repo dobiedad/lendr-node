@@ -7,7 +7,7 @@
 
 }
 
-body,h1,h2,h3,div,button{
+body,h1,h2,h3,div,button,input{
   font-weight: 100 !important;
   font-family:'fibon_sanslight';
 }
@@ -51,7 +51,7 @@ button {
   cursor:pointer;
   font-size: 18px;
 }
-button:focus {outline:0;}
+button:focus,input:focus {outline:0;}
 .login-button {
   background-image: url('facebook.png');
   border: none;
@@ -288,7 +288,7 @@ a {
   max-width: 320px;
   display: block;
   margin: auto;
-  margin-top: 30%;
+  margin-top: 10%;
   background: #16a085;
   min-height: 100px;
   text-align: center;
@@ -352,6 +352,23 @@ a {
   min-width: 80px;
 }
 
+.search {
+  width: 100%;
+  padding: 10px;
+  background: black;
+  border: none;
+  text-align: center;
+  margin-top: 5px;
+  color: white;
+  border-radius: 5px;
+  border: 1px solid #16a085;
+}
+.no-results {
+  height: 300px;
+  display: block;
+  padding: 100px;
+  text-align: center;
+}
 @media (max-width:600px) {
   .info-left {
     left: 5%;

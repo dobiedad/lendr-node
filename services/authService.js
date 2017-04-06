@@ -102,7 +102,9 @@ function returnListOfUsers(array) {
       img:fbUser.picture.data.url
     }
     return user
-  })
+  }).sort(function(a,b){
+    return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+  });
 }
 
 module.exports =  AuthService

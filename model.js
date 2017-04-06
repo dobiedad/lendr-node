@@ -11,6 +11,8 @@ function Model(options) {
   this.net = 0
   this.currentUser = null;
   this.totalIOweTo = {} ;
+  this.friendsQuery = ""
+  this.searchResults = [];
   this.totalImOwedFrom = {} ;
   this.debts = {
     pending:{
@@ -55,6 +57,10 @@ Model.prototype.logout = function() {
 
 Model.prototype.loadFriends = function () {
   this.authService.loadFriends(this)
+};
+
+Model.prototype.filterForFriendsQuery = function () {
+  this.searchResults = filterFriendsForString(this.friends,this.friendsQuery)
 };
 
 Model.prototype.calculateTotal = function(debts) {
@@ -145,4 +151,10 @@ Model.prototype.checkAuthenticated = function() {
     })
 };
 
+function filterFriendsForString(array, string) {
+  var filtered = array.filter(function (el) {
+    return el.name.toLowerCase().indexOf(string.toLowerCase()) >= 0
+  });
+  return filtered
+}
 module.exports = Model;
